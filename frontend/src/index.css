@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --color-primary: 59 130 246; /* #3B82F6 */
+    --color-primary-light: 147 197 253; /* #93C5FD */
+    --color-primary-dark: 29 78 216; /* #1D4ED8 */
+    --color-secondary: 16 185 129; /* #10B981 */
+    --color-secondary-light: 110 231 183; /* #6EE7B7 */
+    --color-secondary-dark: 4 120 87; /* #047857 */
+  }
+}
+
+/* Then use them in your custom classes */
+.btn-primary {
+  @apply bg-[rgb(var(--color-primary))] hover:bg-[rgb(var(--color-primary-dark))];
+}
