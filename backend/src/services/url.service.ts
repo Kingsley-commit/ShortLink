@@ -16,7 +16,7 @@ class UrlService {
   customCode?: string
 ): Promise<{ shortCode: string; shortUrl: string }> {
   try {
-    // Validate URL
+    
     if (!longUrl || typeof longUrl !== 'string') {
       throw new Error('Invalid URL provided');
     }
@@ -27,13 +27,13 @@ class UrlService {
 
     const shortCode = customCode || this.generateShortCode();
 
-    // Check if the short code is already in use
+    
     const existing = await urlModel.findByShortCode(shortCode);
     if (existing) {
       throw new Error('Short code already in use');
     }
 
-    // Create the shortened URL
+   
     const created = await urlModel.create(longUrl, shortCode);
     if (!created) {
       throw new Error('Failed to create URL entry');

@@ -3,6 +3,9 @@ import { motion } from 'framer-motion'
 import { useAuth } from '../../context/AuthContext'
 import { Link, useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, Mail, Lock, User, UserPlus } from 'lucide-react'
+import BackGround from '../../assets/Group7.svg'
+
+
 
 const Signup = () => {
   const [name, setName] = useState('')
@@ -31,7 +34,7 @@ const Signup = () => {
 
     try {
       await signup(name, email, password)
-      navigate('/')
+      navigate('/dashboard')
     } catch (err) {
       setError('Failed to create account')
     }
@@ -55,10 +58,9 @@ const Signup = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-white flex items-center justify-center p-6">
       <div className="bg-white rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2 max-w-5xl w-full">
-        {/* LEFT SIDE TEXT */}
-        <div className="bg-gradient-to-br from-blue-600 to-purple-500 text-white flex flex-col justify-center items-start p-10 space-y-6">
+        <div className=" text-white flex flex-col justify-center items-start p-10 space-y-6" style={{ backgroundImage: `url(${BackGround})` }}>
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -82,7 +84,6 @@ const Signup = () => {
           </motion.div>
         </div>
 
-        {/* RIGHT SIDE FORM */}
         <motion.div
           variants={containerVariants}
           initial="hidden"

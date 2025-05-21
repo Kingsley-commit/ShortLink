@@ -1,4 +1,3 @@
-// frontend/src/hooks/useUrls.ts
 import { useState, useEffect } from 'react'
 import { listUrls, searchUrls,  } from '../services/api'
 import type  { UrlEntry } from '../services/api'
@@ -13,6 +12,7 @@ export const useUrls = () => {
       setLoading(true)
       const data = await listUrls()
       
+      console.log(data)
       setUrls(data)
       setError(null)
     } catch (err) {

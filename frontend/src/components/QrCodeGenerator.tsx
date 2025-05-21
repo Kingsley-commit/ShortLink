@@ -14,14 +14,12 @@ export const QRCodeGenerator = ({ url }: { url: string }) => {
   const [bgColor, setBackgroundColor] = useState('#FFFFFF');
   const [showColorOptions, setShowColorOptions] = useState(false);
   
-  // Logo states
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoUrl, setLogoUrl] = useState<string>('');
-  const [logoSize, setLogoSize] = useState(40); // Size as percentage of QR code
-  const [logoPosition, setLogoPosition] = useState({ x: 50, y: 50 }); // Position as percentage
+  const [logoSize, setLogoSize] = useState(40);
+  const [logoPosition, setLogoPosition] = useState({ x: 50, y: 50 });
   const [showLogoOptions, setShowLogoOptions] = useState(false);
   
-  // Predefined color schemes
   const colorSchemes = [
     { fg: '#000000', bg: '#FFFFFF', name: 'Classic' },
     { fg: '#0066CC', bg: '#FFFFFF', name: 'Blue' },
@@ -66,12 +64,12 @@ export const QRCodeGenerator = ({ url }: { url: string }) => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Set canvas size
-    const qrSize = 480; // Double the display size for better quality
+    // I limited the Canvas size to 480
+    const qrSize = 480;
     canvas.width = qrSize;
     canvas.height = qrSize;
 
-    // Convert SVG to canvas
+    // Converted SVG to canvas
     const svgData = new XMLSerializer().serializeToString(svg);
     const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
     const svgUrl = URL.createObjectURL(svgBlob);
@@ -79,22 +77,19 @@ export const QRCodeGenerator = ({ url }: { url: string }) => {
     const qrImage = new Image();
     
     qrImage.onload = async () => {
-      // Draw QR code
       ctx.drawImage(qrImage, 0, 0, qrSize, qrSize);
       
-      // Draw logo if present
       if (logoUrl) {
         const logoImage = new Image();
         logoImage.crossOrigin = 'anonymous';
         
         logoImage.onload = () => {
-          // Calculate logo size and position
           const logoSizePixels = (qrSize * logoSize) / 100;
           const logoX = (qrSize * logoPosition.x) / 100 - logoSizePixels / 2;
           const logoY = (qrSize * logoPosition.y) / 100 - logoSizePixels / 2;
           
-          // Draw white background circle behind logo for better visibility
-          const circleRadius = logoSizePixels / 2 + 8; // Add some padding
+          // I added white background circle behind logo for better visibility
+          const circleRadius = logoSizePixels / 2 + 8;
           ctx.fillStyle = '#FFFFFF';
           ctx.beginPath();
           ctx.arc(
@@ -106,10 +101,8 @@ export const QRCodeGenerator = ({ url }: { url: string }) => {
           );
           ctx.fill();
           
-          // Draw logo
           ctx.drawImage(logoImage, logoX, logoY, logoSizePixels, logoSizePixels);
           
-          // Convert to blob and download
           canvas.toBlob((blob) => {
             if (blob) {
               const filename = `qr-${url.split('/').pop() || 'code'}-with-logo.png`;
@@ -120,7 +113,6 @@ export const QRCodeGenerator = ({ url }: { url: string }) => {
         
         logoImage.src = logoUrl;
       } else {
-        // No logo, just download QR code
         canvas.toBlob((blob) => {
           if (blob) {
             const filename = `qr-${url.split('/').pop() || 'code'}.png`;
@@ -171,7 +163,6 @@ export const QRCodeGenerator = ({ url }: { url: string }) => {
           exit={{ opacity: 0, height: 0 }}
         >
           <div className="flex flex-col lg:flex-row gap-6">
-            {/* QR Code Preview */}
             <motion.div 
               className="flex-1 flex justify-center items-center"
               initial={{ scale: 0.95 }}
@@ -192,7 +183,6 @@ export const QRCodeGenerator = ({ url }: { url: string }) => {
                   includeMargin={true}
                 />
                 
-                {/* Logo overlay */}
                 {logoUrl && (
                   <div
                     className="absolute rounded-full bg-white p-1 shadow-md"
@@ -216,9 +206,7 @@ export const QRCodeGenerator = ({ url }: { url: string }) => {
               </div>
             </motion.div>
 
-            {/* Controls */}
             <div className="flex-1 flex flex-col justify-between space-y-6">
-              {/* Logo Upload Section */}
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h4 className="font-medium text-gray-700">Logo</h4>
@@ -240,7 +228,6 @@ export const QRCodeGenerator = ({ url }: { url: string }) => {
                     exit={{ opacity: 0, height: 0 }}
                     className="space-y-4"
                   >
-                    {/* Logo upload */}
                     <div>
                       <input
                         ref={fileInputRef}
@@ -281,10 +268,8 @@ export const QRCodeGenerator = ({ url }: { url: string }) => {
                       )}
                     </div>
 
-                    {/* Logo controls */}
                     {logoFile && (
                       <div className="space-y-4">
-                        {/* Size control */}
                         <div>
                           <label className="block text-sm font-medium text-gray-600 mb-2">
                             Logo Size: {logoSize}%
@@ -299,7 +284,6 @@ export const QRCodeGenerator = ({ url }: { url: string }) => {
                           />
                         </div>
 
-                        {/* Position controls */}
                         <div className="grid grid-cols-2 gap-4">
                           <div>
                             <label className="block text-sm font-medium text-gray-600 mb-2">
@@ -329,7 +313,6 @@ export const QRCodeGenerator = ({ url }: { url: string }) => {
                           </div>
                         </div>
 
-                        {/* Reset logo position */}
                         <motion.button
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
@@ -345,7 +328,6 @@ export const QRCodeGenerator = ({ url }: { url: string }) => {
                 )}
               </div>
 
-              {/* Color controls */}
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h4 className="font-medium text-gray-700">Customize Colors</h4>
@@ -367,7 +349,6 @@ export const QRCodeGenerator = ({ url }: { url: string }) => {
                     exit={{ opacity: 0, height: 0 }}
                     className="space-y-4"
                   >
-                    {/* Color inputs */}
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-600 mb-1">QR Code Color</label>
@@ -405,7 +386,6 @@ export const QRCodeGenerator = ({ url }: { url: string }) => {
                       </div>
                     </div>
 
-                    {/* Reset button */}
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
@@ -418,7 +398,6 @@ export const QRCodeGenerator = ({ url }: { url: string }) => {
                   </motion.div>
                 )}
 
-                {/* Color scheme presets */}
                 <div>
                   <h4 className="font-medium text-gray-700 mb-3">Color Schemes</h4>
                   <div className="grid grid-cols-4 gap-2">
@@ -444,7 +423,6 @@ export const QRCodeGenerator = ({ url }: { url: string }) => {
                 </div>
               </div>
 
-              {/* Download button */}
               <motion.button
                 whileHover={{ scale: 1.03, backgroundColor: '#1a56db' }}
                 whileTap={{ scale: 0.97 }}
@@ -459,7 +437,6 @@ export const QRCodeGenerator = ({ url }: { url: string }) => {
         </motion.div>
       )}
       
-      {/* Hidden canvas for download */}
       <canvas ref={canvasRef} className="hidden" />
     </motion.div>
   );

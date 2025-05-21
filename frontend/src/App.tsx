@@ -5,28 +5,38 @@ import UrlForm from './components/UrlForm'
 import UrlList from './components/UrlList'
 import Login from './components/auth/Login'
 import Signup from './components/auth/SignUp'
+
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import Header from './components/Header'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import { useUrls } from './hooks/useUrls'
 import { shortenUrl } from './services/api'
+import Home from './pages/Home'
+import { useShortener } from './hooks/useShortner'
+import { Navigate } from 'react-router-dom'
+import BackGround from './assets/Group7.svg'
 
-// Main Dashboard Component
+
 function Dashboard() {
   const { urls, loading, error, fetchUrls, search } = useUrls()
-  const [successMessage, setSuccessMessage] = useState('')
+  // const [successMessage, setSuccessMessage] = useState('')
+  // const [errorMessage, setErrorMessage] = useState('')
 
-  const handleShorten = async (url: string, customCode: string) => {
-    try {
-      const data = await shortenUrl(url, customCode)
-      setSuccessMessage(`URL shortened successfully: ${data.shortUrl}`)
-      fetchUrls() // refresh list after shorten
-      setTimeout(() => setSuccessMessage(''), 5000)
-    } catch (error) {
-      console.error('Failed to shorten URL:', error)
-      alert('Failed to shorten URL, please try again.')
-    }
-  }
+  const { handleShorten, successMessage, errorMessage } = useShortener(fetchUrls)
+
+
+  // const handleShorten = async (url: string, customCode: string) => {
+  //   try {
+  //     const data = await shortenUrl(url, customCode)
+  //     setSuccessMessage(`URL shortened successfully: ${data.shortUrl}`)
+  //     fetchUrls() // refresh list after shorten
+  //     setTimeout(() => setSuccessMessage(''), 5000)
+  //   } catch (error) {
+  //     console.error('Failed to shorten URL:', error)
+  //     setErrorMessage(`${error}`)
+  //     setTimeout(() => setErrorMessage(''), 5000)
+  //   }
+  // }
 
   return (
     <motion.div
@@ -34,10 +44,16 @@ function Dashboard() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
       className="min-h-screen bg-gray-50"
+      style={{fontFamily: "montserrat"}}
     >
       <Header />
       
-      <div className="py-8 px-4">
+      <div className="py-8 px-4"  style={{ 
+        backgroundImage: `url(${BackGround})`, 
+        backgroundRepeat: "no-repeat", 
+        backgroundSize: 'cover', 
+        fontFamily: "Montserrat"
+      }}>
         <div className="max-w-4xl mx-auto">
           {successMessage && (
             <motion.div
@@ -50,6 +66,17 @@ function Dashboard() {
             </motion.div>
           )}
 
+          {errorMessage &&(
+            <motion.div
+             initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="mb-6 p-4 bg-red-100 text-red-700 rounded-lg">
+
+           {errorMessage}
+            </motion.div>
+          )}
+
           <div className="grid grid-cols-1 gap-8">
             <motion.div
               initial={{ y: 20, opacity: 0 }}
@@ -57,7 +84,7 @@ function Dashboard() {
               transition={{ delay: 0.1 }}
               className="col-span-1"
             >
-              <UrlForm onSubmit={handleShorten} />
+              <UrlForm onSubmit={handleShorten} error={error}/>
             </motion.div>
 
             <motion.div
@@ -95,17 +122,18 @@ function AuthWrapper() {
     const storedUser = localStorage.getItem('user')
     console.log(storedUser)
     if (storedUser && !user) {
-      // You might want to validate the stored user with your backend
       console.log('User found in localStorage:', storedUser)
     }
   }, [user])
 
   return (
-    <Routes>
+  <Routes>
+      <Route path="/" element={<Navigate to="/Home" replace />} />
+      <Route path="/Home" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route
-        path="/*"
+        path="/dashboard"
         element={
           <ProtectedRoute>
             <Dashboard />
@@ -113,10 +141,11 @@ function AuthWrapper() {
         }
       />
     </Routes>
+
   )
 }
 
-// Main App component
+
 function App() {
   return (
     <AuthProvider>

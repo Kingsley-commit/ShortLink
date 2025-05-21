@@ -9,7 +9,7 @@ export const UrlForm = ({ onSubmit, loading = false }: {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [customCode, setCustomCode] = useState('');
-
+  const [showCustomCode, setShowCustomCode] = useState(false);
 
   const validateUrl = (url: string): boolean => {
     try {
@@ -39,8 +39,8 @@ export const UrlForm = ({ onSubmit, loading = false }: {
 
     try {
       await onSubmit(url.trim(), customCode.trim());
-  setUrl('');
-  setCustomCode('');
+      setUrl('');
+      setCustomCode('');
     } catch (err) {
       console.error("❌ Failed to shorten URL:", err);
       setError("Something went wrong. Please try again.");
@@ -58,19 +58,22 @@ export const UrlForm = ({ onSubmit, loading = false }: {
     }
   };
 
+  const toggleCustomCode = () => {
+    setShowCustomCode(!showCustomCode);
+  };
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="bg-gradient-to-br from-blue-50 to-indigo-100 p-8 md:p-10 rounded-3xl shadow-2xl border border-indigo-100 backdrop-blur-md relative overflow-hidden"
+      className="bg-white/20 opacity-20 backdrop-blur-md  p-8 md:p-10 rounded-3xl shadow-2xl backdrop-blur-md relative overflow-hidden"
     >
-      {/* Background decorative elements */}
       <div className="absolute -top-24 -right-24 w-48 h-48 rounded-full bg-indigo-200 opacity-30 blur-2xl"></div>
       <div className="absolute -bottom-12 -left-12 w-36 h-36 rounded-full bg-blue-300 opacity-20 blur-2xl"></div>
       
       <motion.h2 
-        className="text-3xl md:text-4xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-indigo-800 via-blue-600 to-indigo-700"
+        className="text-3xl md:text-4xl font-bold mb-6 text-center bg-clip-text  bg-gradient-to-r text-[#FFFFFF]"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2, duration: 0.8 }}
@@ -82,7 +85,7 @@ export const UrlForm = ({ onSubmit, loading = false }: {
         <div>
           <motion.label 
             htmlFor="url" 
-            className="block text-sm font-medium text-indigo-800 mb-2 ml-1"
+            className="block text-sm font-medium text-white mb-2 ml-1"
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
@@ -95,11 +98,7 @@ export const UrlForm = ({ onSubmit, loading = false }: {
             transition={{ delay: 0.4 }}
             className="relative"
           >
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-              </svg>
-            </div>
+           
             <input
               type="text"
               id="url"
@@ -111,17 +110,65 @@ export const UrlForm = ({ onSubmit, loading = false }: {
               disabled={loading || isSubmitting}
             />
 
-            <label className="block text-sm font-medium text-indigo-800 mb-2 ml-1 mt-6">
-  Customize your short URL (optional)
-</label>
-<input
-  type="text"
-  value={customCode}
-  onChange={(e) => setCustomCode(e.target.value)}
-  placeholder="Enter custom name e.g. mae-rocks"
-  className="w-full pl-4 pr-5 py-4 border-2 border-indigo-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-lg transition-all duration-300 hover:shadow-xl bg-white/90 backdrop-blur-sm"
-/>
+
+            <div className="mt-4 flex justify-center">
+              <motion.button
+                type="button"
+                onClick={toggleCustomCode}
+                className="group relative inline-flex items-center justify-center px-6 py-3 overflow-hidden font-medium rounded-xl bg-gradient-to-r from-indigo-600 to-blue-500 text-white shadow-md transition-all duration-300"
+                whileHover={{ 
+                  scale: 1.03,
+                  boxShadow: '0 10px 25px -5px rgba(79, 70, 229, 0.4)'
+                }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <span className="absolute w-0 h-0 transition-all duration-300 ease-out bg-white rounded-full group-hover:w-56 group-hover:h-56 opacity-10"></span>
+                
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  className={`h-5 w-5 mr-2 transition-transform duration-300 ${showCustomCode ? 'rotate-180' : ''}`} 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d={showCustomCode ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"} 
+                  />
+                </svg>
+                
+                <span className="relative font-medium">
+                  {showCustomCode ? "Hide Custom Link" : "Create Custom Link"}
+                </span>
+              </motion.button>
+            </div>
+
+            <AnimatePresence>
+              {showCustomCode && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0, y: -10 }}
+                  animate={{ opacity: 1, height: 'auto', y: 0 }}
+                  exit={{ opacity: 0, height: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                  className="mt-6"
+                >
+                  <label className="block text-sm font-medium text-indigo-800 mb-2 ml-1">
+                    Customize your short URL
+                  </label>
+                  <input
+                    type="text"
+                    value={customCode}
+                    onChange={(e) => setCustomCode(e.target.value)}
+                    placeholder="Enter custom name e.g. mae-rocks"
+                    className="w-full pl-4 pr-5 py-4 border-2 border-indigo-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-lg transition-all duration-300 hover:shadow-xl bg-white/90 backdrop-blur-sm"
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
+          
           <AnimatePresence>
             {error && (
               <motion.div 
@@ -181,7 +228,6 @@ export const UrlForm = ({ onSubmit, loading = false }: {
             )}
           </motion.button>
           
-          {/* Subtle glow effect under button */}
           <div className="absolute -bottom-2 inset-x-0 h-8 bg-indigo-500 opacity-20 blur-xl rounded-full"></div>
         </motion.div>
       </form>

@@ -1,6 +1,6 @@
 import { Schema, model, Document, Types } from 'mongoose';
 
-// Don't forget to include _id if you need to use it
+
 export interface IUser extends Document {
   _id: Types.ObjectId;
   fullName: string;

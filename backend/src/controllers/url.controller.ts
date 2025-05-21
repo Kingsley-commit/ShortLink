@@ -11,18 +11,18 @@ async encodeUrl(req: Request, res: Response): Promise<void> {
       return;
     }
 
-    // If user provides a customCode, validate and check for uniqueness
+    
     if (customCode) {
       const existing = await urlService.getLongUrl(customCode);
       if (existing) {
-        res.status(400).json({ error: 'Custom code is already taken' });
+        res.status(400).json({ error: 'Url is already taken' });
         return;
       }
 
       const { shortUrl } = await urlService.shortenUrl(longUrl, customCode);
       res.json({ shortCode: customCode, shortUrl });
     } else {
-      // No custom code, proceed with normal generation
+      
       const { shortCode, shortUrl } = await urlService.shortenUrl(longUrl);
       res.json({ shortCode, shortUrl });
     }

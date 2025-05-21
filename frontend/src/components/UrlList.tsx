@@ -6,12 +6,20 @@ import type { UrlEntry } from "../services/api";
 export const UrlList = ({ urls, loading, error }: { urls: UrlEntry[]; loading: boolean; error: string | null }) => {
   const [selectedUrl, setSelectedUrl] = useState<string | null>(null);
   const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
+  const [showAll, setShowAll] = useState(false);
+
 
   const handleCopy = (url: string) => {
     navigator.clipboard.writeText(url);
     setCopiedUrl(url);
     setTimeout(() => setCopiedUrl(null), 2000);
   };
+
+  // Sorted URLs to have the most recent first
+  const sortedUrls = [...urls].reverse();
+  
+  // Get URLs to display based on showAll state
+  const displayedUrls = showAll ? sortedUrls : sortedUrls.slice(0, 1);
 
   if (loading) {
     return (
@@ -96,18 +104,45 @@ export const UrlList = ({ urls, loading, error }: { urls: UrlEntry[]; loading: b
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <motion.h3 
-        className="text-xl font-semibold text-indigo-800 px-1"
+      <motion.div
+        className="flex justify-between items-center px-1"
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.2 }}
       >
-        Your Shortened URLs
-      </motion.h3>
+        <h3 className="text-xl font-semibold text-indigo-800">
+          {showAll ? 'All Shortened URLs' : 'Latest Shortened URL'}
+        </h3>
+        
+        {urls.length > 1 && (
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setShowAll(!showAll)}
+            className="text-indigo-600 hover:text-indigo-800 font-medium flex items-center"
+          >
+            {showAll ? (
+              <>
+                <span>Show Less</span>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                </svg>
+              </>
+            ) : (
+              <>
+                <span>View All ({urls.length})</span>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </>
+            )}
+          </motion.button>
+        )}
+      </motion.div>
       
       <AnimatePresence>
-        {urls.map((url, index) => (
-          <div key={index} className="space-y-3">
+        {displayedUrls.map((url, index) => (
+          <div key={url.shortUrl} className="space-y-3">
             <motion.div
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -122,9 +157,9 @@ export const UrlList = ({ urls, loading, error }: { urls: UrlEntry[]; loading: b
               whileHover={{ y: -3 }}
               className="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100 hover:border-indigo-200 transition-all duration-300 hover:shadow-xl"
             >
-              {/* Card content with glass morphism effect */}
+              {/*theCard content with glass morphism effect */}
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                {/* Original URL */}
+                {/*the Original URL */}
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-semibold text-indigo-400 uppercase tracking-wider mb-1">Original URL</p>
                   <div className="flex items-center">
@@ -142,7 +177,7 @@ export const UrlList = ({ urls, loading, error }: { urls: UrlEntry[]; loading: b
                   </div>
                 </div>
 
-                {/* Short URL */}
+                {/*the Short URL */}
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-semibold text-indigo-400 uppercase tracking-wider mb-1">Short URL</p>
                   <div className="flex items-center">
@@ -160,7 +195,7 @@ export const UrlList = ({ urls, loading, error }: { urls: UrlEntry[]; loading: b
                   </div>
                 </div>
 
-                {/* Visits to the Url */}
+                {/*amountof  Visits to the Url */}
                 <div className="flex items-center space-x-4">
                   <motion.div 
                     className="flex items-center"
@@ -180,7 +215,7 @@ export const UrlList = ({ urls, loading, error }: { urls: UrlEntry[]; loading: b
                   </motion.div>
                   
                   <div className="flex space-x-2">
-                    {/* Copy Button */}
+                    {/*theCopy Button */}
                     <motion.button
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
@@ -202,7 +237,7 @@ export const UrlList = ({ urls, loading, error }: { urls: UrlEntry[]; loading: b
                       )}
                     </motion.button>
 
-                    {/* QR Code Button */}
+                    {/*the QR Code Button */}
                     <motion.button
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
@@ -222,7 +257,7 @@ export const UrlList = ({ urls, loading, error }: { urls: UrlEntry[]; loading: b
               </div>
             </motion.div>
 
-            {/* QR Code Panel */}
+            {/*the QR Code Panel */}
             <AnimatePresence>
               {selectedUrl === url.shortUrl && (
                 <motion.div
@@ -239,6 +274,28 @@ export const UrlList = ({ urls, loading, error }: { urls: UrlEntry[]; loading: b
           </div>
         ))}
       </AnimatePresence>
+
+      {/* Show more/less URLs animation */}
+      {showAll && urls.length > 1 && (
+        <motion.div
+          className="flex justify-center mt-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+        >
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setShowAll(false)}
+            className="bg-indigo-50 hover:bg-indigo-100 text-indigo-600 px-6 py-3 rounded-xl font-medium flex items-center"
+          >
+            <span>Show Less</span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+            </svg>
+          </motion.button>
+        </motion.div>
+      )}
     </motion.div>
   );
 };

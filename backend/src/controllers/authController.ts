@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import { User } from '../models/User';
 import { generateTokens } from '../utils/generateTokens';
 
-// Signup
+
 export const signUp = async (req: Request, res: Response): Promise<void> => {
   try {
     const { fullName, email, password, confirmPassword } = req.body;
@@ -45,7 +45,7 @@ export const signUp = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-// Login
+
 export const signIn = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body;
