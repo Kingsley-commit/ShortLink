@@ -1,4 +1,3 @@
-// frontend/src/services/api.ts
 const API_BASE_URL = 'https://shortlnk.live';
 
 
