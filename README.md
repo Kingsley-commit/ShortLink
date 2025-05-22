@@ -1,6 +1,6 @@
 # ShortLink
-**ShortLink** is a user-friendly URL shortening web application that provides instant redirection. Guest users can quickly generate basic short links, while registered users gain additional features such as custom URL aliases, branded QR codes, and a searchable dashboard with visit statistics.
-
+**ShortLink** is a user-friendly URL shortening web application that provides instant redirection. Guest users can quickly generate basic short links, while registered users gain additional features such as custom URL aliases, branded QR codes, and a searchable dashboard with visit statistics.<br><br>
+![image](https://github.com/user-attachments/assets/493fb153-cf8f-412f-9501-0e907dac0343)<br>
 ## Technology Stack
 * **Backend:** Node.js, Express.js (follows the MVC pattern)
 * **Frontend:** React.js with Tailwind CSS for styling
