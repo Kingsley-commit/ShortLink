@@ -1,5 +1,5 @@
 // frontend/src/services/api.ts
-const API_BASE_URL = 'https://shortlink-backend-qt4t.onrender.com';
+const API_BASE_URL = 'https://shortlnk.live';
 
 // frontend/src/services/api.ts
 export interface UrlEntry {
