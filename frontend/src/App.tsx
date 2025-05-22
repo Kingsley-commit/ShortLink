@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import {  useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import UrlForm from './components/UrlForm'
@@ -10,7 +10,6 @@ import ProtectedRoute from './components/auth/ProtectedRoute'
 import Header from './components/Header'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import { useUrls } from './hooks/useUrls'
-import { shortenUrl } from './services/api'
 import Home from './pages/Home'
 import { useShortener } from './hooks/useShortner'
 import { Navigate } from 'react-router-dom'
@@ -84,7 +83,7 @@ function Dashboard() {
               transition={{ delay: 0.1 }}
               className="col-span-1"
             >
-              <UrlForm onSubmit={handleShorten} error={error}/>
+              <UrlForm onSubmit={handleShorten} />
             </motion.div>
 
             <motion.div
@@ -115,7 +114,7 @@ function Dashboard() {
 
 
 function AuthWrapper() {
-  const { isAuthenticated, user } = useAuth()
+  const {  user } = useAuth()
   
   useEffect(() => {
     // Check if user is stored in localStorage on app load

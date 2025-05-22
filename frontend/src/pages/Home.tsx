@@ -1,8 +1,7 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ClipboardIcon, CheckIcon } from "lucide-react";
-import React from '../assets/Group7.svg';
 import { useShortener } from "../hooks/useShortner";
 import { shortenUrl } from "../services/api"; 
 import Image from "../assets/Layer_1.svg";
@@ -10,24 +9,18 @@ import BackGround from "../assets/Group7.svg";
 import Logo from "../assets/Link.svg";
 import { Link } from "react-router-dom";
 
-
 export default function Home() {
   const [url, setUrl] = useState("");
   const [shortUrl, setShortUrl] = useState("");
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showResult, setShowResult] = useState(false);
   const [copied, setCopied] = useState(false);
-  
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-
-  
   const { successMessage, errorMessage } = useShortener(() => {});
 
- 
-
-  const validateUrl = (url) => {
+  const validateUrl = (url: string): boolean => {
     try {
       new URL(url);
       return true;
@@ -36,17 +29,17 @@ export default function Home() {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSubmitting) return;
 
     if (!url.trim()) {
-      setError('Please enter a URL');
+      setError("Please enter a URL");
       return;
     }
 
     if (!validateUrl(url)) {
-      setError('Please enter a valid URL (include http:// or https://)');
+      setError("Please enter a valid URL (include http:// or https://)");
       return;
     }
 
@@ -54,8 +47,8 @@ export default function Home() {
     setIsSubmitting(true);
 
     try {
-      const result = await shortenUrl(url.trim(), undefined);
-      
+      const result = await shortenUrl(url.trim(), "");
+
       if (result?.shortUrl) {
         setShortUrl(result.shortUrl);
         setShowResult(true);
@@ -76,10 +69,7 @@ export default function Home() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   
   return (
     <div 

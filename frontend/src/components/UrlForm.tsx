@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const UrlForm = ({ onSubmit, loading = false }: {
-  onSubmit: (url: string, customCode?: string) => void;
+  onSubmit: (url: string, customCode?: string) => Promise<void>;
   loading?: boolean;
-})=> {
+}) => {
   const [url, setUrl] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);

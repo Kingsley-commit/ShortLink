@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { shortenUrl } from '../services/api'
-import { useUrls } from './useUrls'
+
 
 export function useShortener (fetchUrls: () => void) {
   
@@ -9,9 +9,10 @@ export function useShortener (fetchUrls: () => void) {
 
 
 
-  const handleShorten = async (url: string, customCode: string) => {
+  const handleShorten = async (url: string, customCode?: string) => {
+ 
     try {
-      const data = await shortenUrl(url, customCode)
+      const data = await shortenUrl(url, customCode || "")
       console.log(data)
       setSuccessMessage(`URL shortened successfully: ${data.shortUrl}`)
       fetchUrls()
