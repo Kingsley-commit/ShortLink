@@ -64,7 +64,7 @@ function Dashboard() {
             className="mb-6 text-center"
           >
             <h1 className="text-3xl font-bold text-white mb-2">
-              Welcome back, {user.name}!
+              Welcome back, {user.name.split(' ')[0]}!
             </h1>
             <p className="text-white">Manage your shortened URLs</p>
           </motion.div>

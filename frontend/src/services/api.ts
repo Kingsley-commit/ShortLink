@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://shortlnk.live';
+const API_BASE_URL = 'https://shortlnk.live/api';
 
 
 export interface UrlEntry {
