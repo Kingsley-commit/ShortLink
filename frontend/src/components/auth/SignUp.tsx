@@ -34,7 +34,7 @@ const Signup = () => {
 
     try {
       await signup(name, email, password)
-      navigate('/dashboard')
+      navigate('/login')
     } catch (err) {
       setError('Account Already Exist')
     }
