@@ -5,7 +5,6 @@ import UrlForm from './components/UrlForm'
 import UrlList from './components/UrlList'
 import Login from './components/auth/Login'
 import Signup from './components/auth/SignUp'
-
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import Header from './components/Header'
 import { AuthProvider, useAuth } from './context/AuthContext'
@@ -14,6 +13,7 @@ import Home from './pages/Home'
 import { useShortener } from './hooks/useShortner'
 import { Navigate } from 'react-router-dom'
 import BackGround from './assets/Group7.svg'
+import NotFound from './pages/NotFound'
 
 
 function Dashboard() {
@@ -131,6 +131,7 @@ function AuthWrapper() {
       <Route path="/Home" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="*" element={<NotFound />} />
       <Route
         path="/dashboard"
         element={

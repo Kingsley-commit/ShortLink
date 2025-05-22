@@ -36,7 +36,7 @@ const Signup = () => {
       await signup(name, email, password)
       navigate('/dashboard')
     } catch (err) {
-      setError('Failed to create account')
+      setError('Account Already Exist')
     }
   }
 
@@ -105,7 +105,7 @@ const Signup = () => {
             </motion.div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6" autoComplete='off'>
             <motion.div variants={itemVariants}>
               <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
               <div className="relative">

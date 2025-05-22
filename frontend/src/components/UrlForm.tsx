@@ -81,7 +81,7 @@ export const UrlForm = ({ onSubmit, loading = false }: {
         Shorten Your URL
       </motion.h2>
 
-      <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
+      <form onSubmit={handleSubmit} className="space-y-6 relative z-10" autoComplete='off'>
         <div>
           <motion.label 
             htmlFor="url" 

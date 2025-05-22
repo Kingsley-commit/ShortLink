@@ -79,7 +79,7 @@ const Login = () => {
           </motion.div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6" autoComplete='off'>
           <motion.div variants={itemVariants}>
             <label className="block text-sm font-medium text-white mb-2">Email</label>
             <div className="relative">
