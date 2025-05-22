@@ -83,7 +83,7 @@ const Login = () => {
           <motion.div variants={itemVariants}>
             <label className="block text-sm font-medium text-white mb-2">Email</label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white w-5 h-5" />
+              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black w-5 h-5" />
               <input
                 type="email"
                 value={email}
@@ -98,7 +98,7 @@ const Login = () => {
           <motion.div variants={itemVariants}>
             <label className="block text-sm font-medium text-white mb-2">Password</label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white w-5 h-5" />
+              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black w-5 h-5" />
               <input
                 type={showPassword ? 'text' : 'password'}
                 value={password}

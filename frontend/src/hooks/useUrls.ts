@@ -1,48 +1,71 @@
-import { useState, useEffect } from 'react'
-import { listUrls, searchUrls,  } from '../services/api'
-import type  { UrlEntry } from '../services/api'
+import { useState, useEffect, useCallback } from 'react';
+import { listUrls, searchUrls, type UrlEntry } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 export const useUrls = () => {
-  const [urls, setUrls] = useState<UrlEntry[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [urls, setUrls] = useState<UrlEntry[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const { user } = useAuth(); 
 
-  const fetchUrls = async () => {
-    try {
-      setLoading(true)
-      const data = await listUrls()
-      
-      console.log(data)
-      setUrls(data)
-      setError(null)
-    } catch (err) {
-      setError('Failed to fetch URLs')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const search = async (query: string) => {
-    if (query.length < 3) {
-      fetchUrls()
-      return
-    }
+  const fetchUrls = useCallback(async () => {
     
-    try {
-      setLoading(true)
-      const data = await searchUrls(query)
-      setUrls(data)
-      setError(null)
-    } catch (err) {
-      setError('Failed to search URLs')
-    } finally {
-      setLoading(false)
+    if (!user) {
+      setUrls([]);
+      setLoading(false);
+      setError(null);
+      return;
     }
-  }
 
+    try {
+      setLoading(true);
+      setError(null);
+      
+      let data: UrlEntry[];
+      if (searchQuery && searchQuery.length >= 3) {
+        data = await searchUrls(searchQuery);
+      } else {
+        data = await listUrls();
+      }
+      
+      setUrls(data);
+    } catch (err) {
+      console.error('Failed to fetch URLs:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch URLs');
+      
+      
+      if (err instanceof Error && err.message.includes('Authentication')) {
+        setUrls([]);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [searchQuery, user]);
+
+  const search = useCallback((query: string) => {
+    setSearchQuery(query);
+  }, []);
+
+  // this is for fetching URLs when user changes or search query changes
   useEffect(() => {
-    fetchUrls()
-  }, [])
+    fetchUrls();
+  }, [fetchUrls]);
 
-  return { urls, loading, error, fetchUrls, search }
-}
+  // Clear data when user logs out
+  useEffect(() => {
+    if (!user) {
+      setUrls([]);
+      setError(null);
+      setSearchQuery('');
+    }
+  }, [user]);
+
+  return {
+    urls,
+    loading,
+    error,
+    fetchUrls,
+    search,
+  };
+};

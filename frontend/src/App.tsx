@@ -16,26 +16,29 @@ import BackGround from './assets/Group7.svg'
 import NotFound from './pages/NotFound'
 
 
+
+
 function Dashboard() {
-  const { urls, loading, error, fetchUrls, search } = useUrls()
-  // const [successMessage, setSuccessMessage] = useState('')
-  // const [errorMessage, setErrorMessage] = useState('')
+  const { urls, loading, error, fetchUrls, search } = useUrls();
+  const { handleShorten, successMessage, errorMessage } = useShortener(fetchUrls);
+  const { user } = useAuth();
+  console.log(user)
 
-  const { handleShorten, successMessage, errorMessage } = useShortener(fetchUrls)
-
-
-  // const handleShorten = async (url: string, customCode: string) => {
-  //   try {
-  //     const data = await shortenUrl(url, customCode)
-  //     setSuccessMessage(`URL shortened successfully: ${data.shortUrl}`)
-  //     fetchUrls() // refresh list after shorten
-  //     setTimeout(() => setSuccessMessage(''), 5000)
-  //   } catch (error) {
-  //     console.error('Failed to shorten URL:', error)
-  //     setErrorMessage(`${error}`)
-  //     setTimeout(() => setErrorMessage(''), 5000)
-  //   }
-  // }
+  
+  if (!user) {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="min-h-screen bg-gray-50 flex items-center justify-center"
+      >
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading dashboard...</p>
+        </div>
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div
@@ -47,13 +50,26 @@ function Dashboard() {
     >
       <Header />
       
-      <div className="py-8 px-4"  style={{ 
+      <div className="py-8 px-4" style={{ 
         backgroundImage: `url(${BackGround})`, 
         backgroundRepeat: "no-repeat", 
         backgroundSize: 'cover', 
         fontFamily: "Montserrat"
       }}>
         <div className="max-w-4xl mx-auto">
+         
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6 text-center"
+          >
+            <h1 className="text-3xl font-bold text-white mb-2">
+              Welcome back, {user.name}!
+            </h1>
+            <p className="text-white">Manage your shortened URLs</p>
+          </motion.div>
+
+          
           {successMessage && (
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
@@ -65,18 +81,20 @@ function Dashboard() {
             </motion.div>
           )}
 
-          {errorMessage &&(
+          
+          {errorMessage && (
             <motion.div
-             initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="mb-6 p-4 bg-red-100 text-red-700 rounded-lg">
-
-           {errorMessage}
+              className="mb-6 p-4 bg-red-100 text-red-700 rounded-lg"
+            >
+              {errorMessage}
             </motion.div>
           )}
 
           <div className="grid grid-cols-1 gap-8">
+           
             <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -86,6 +104,7 @@ function Dashboard() {
               <UrlForm onSubmit={handleShorten} />
             </motion.div>
 
+            
             <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -102,22 +121,26 @@ function Dashboard() {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
-                <UrlList urls={urls} loading={loading} error={error} />
+                <UrlList 
+                  urls={urls} 
+                  loading={loading} 
+                  error={error}
+                  onRetry={fetchUrls} 
+                />
               </div>
             </motion.div>
           </div>
         </div>
       </div>
     </motion.div>
-  )
+  );
 }
-
 
 function AuthWrapper() {
   const {  user } = useAuth()
   
   useEffect(() => {
-    // Check if user is stored in localStorage on app load
+    
     const storedUser = localStorage.getItem('user')
     console.log(storedUser)
     if (storedUser && !user) {

@@ -3,11 +3,17 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { QRCodeGenerator } from './QrCodeGenerator';
 import type { UrlEntry } from "../services/api";
 
-export const UrlList = ({ urls, loading, error }: { urls: UrlEntry[]; loading: boolean; error: string | null }) => {
+interface UrlListProps {
+  urls: UrlEntry[];
+  loading: boolean;
+  error: string | null;
+  onRetry?: () => void; // Optional retry function
+}
+
+export const UrlList = ({ urls, loading, error, onRetry }: UrlListProps) => {
   const [selectedUrl, setSelectedUrl] = useState<string | null>(null);
   const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
   const [showAll, setShowAll] = useState(false);
-
 
   const handleCopy = (url: string) => {
     navigator.clipboard.writeText(url);
@@ -65,7 +71,19 @@ export const UrlList = ({ urls, loading, error }: { urls: UrlEntry[]; loading: b
             </svg>
           </motion.div>
           <p className="text-center text-lg">{error}</p>
-          <p className="text-center text-sm mt-2 text-red-500">Please try again later</p>
+          <p className="text-center text-sm mt-2 text-red-500">
+            {error.includes('Authentication') ? 'Please log in to view your URLs' : 'Please try again later'}
+          </p>
+          {onRetry && !error.includes('Authentication') && (
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={onRetry}
+              className="mt-4 bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-lg font-medium"
+            >
+              Try Again
+            </motion.button>
+          )}
         </div>
       </motion.div>
     );
@@ -111,7 +129,7 @@ export const UrlList = ({ urls, loading, error }: { urls: UrlEntry[]; loading: b
         transition={{ delay: 0.2 }}
       >
         <h3 className="text-xl font-semibold text-indigo-800">
-          {showAll ? 'All Shortened URLs' : 'Latest Shortened URL'}
+          {showAll ? 'All Your Shortened URLs' : 'Your Latest Shortened URL'}
         </h3>
         
         {urls.length > 1 && (
@@ -157,9 +175,9 @@ export const UrlList = ({ urls, loading, error }: { urls: UrlEntry[]; loading: b
               whileHover={{ y: -3 }}
               className="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100 hover:border-indigo-200 transition-all duration-300 hover:shadow-xl"
             >
-              {/*theCard content with glass morphism effect */}
+              {/* Card content with glass morphism effect */}
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                {/*the Original URL */}
+                {/* Original URL */}
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-semibold text-indigo-400 uppercase tracking-wider mb-1">Original URL</p>
                   <div className="flex items-center">
@@ -177,7 +195,7 @@ export const UrlList = ({ urls, loading, error }: { urls: UrlEntry[]; loading: b
                   </div>
                 </div>
 
-                {/*the Short URL */}
+                {/* Short URL */}
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-semibold text-indigo-400 uppercase tracking-wider mb-1">Short URL</p>
                   <div className="flex items-center">
@@ -195,7 +213,7 @@ export const UrlList = ({ urls, loading, error }: { urls: UrlEntry[]; loading: b
                   </div>
                 </div>
 
-                {/*amountof  Visits to the Url */}
+                {/* Visits */}
                 <div className="flex items-center space-x-4">
                   <motion.div 
                     className="flex items-center"
@@ -215,7 +233,7 @@ export const UrlList = ({ urls, loading, error }: { urls: UrlEntry[]; loading: b
                   </motion.div>
                   
                   <div className="flex space-x-2">
-                    {/*theCopy Button */}
+                    {/* Copy Button */}
                     <motion.button
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
@@ -237,7 +255,7 @@ export const UrlList = ({ urls, loading, error }: { urls: UrlEntry[]; loading: b
                       )}
                     </motion.button>
 
-                    {/*the QR Code Button */}
+                    {/* QR Code Button */}
                     <motion.button
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
@@ -257,7 +275,7 @@ export const UrlList = ({ urls, loading, error }: { urls: UrlEntry[]; loading: b
               </div>
             </motion.div>
 
-            {/*the QR Code Panel */}
+            {/* QR Code Panel */}
             <AnimatePresence>
               {selectedUrl === url.shortUrl && (
                 <motion.div

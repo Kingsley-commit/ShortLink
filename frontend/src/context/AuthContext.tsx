@@ -78,45 +78,54 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [])
   
-  const login = async (email: string, password: string) => {
-    dispatch({ type: 'AUTH_START' })
-    try {
-      const response = await axios.post(`${API_BASE_URL}/signin`, {
-        email,
-        password,
-        
-      })
-      const user = response.data.user
-      localStorage.setItem('user', JSON.stringify(user))
-      dispatch({ type: 'AUTH_SUCCESS', payload: user })
-    } catch (error) {
-      dispatch({ type: 'AUTH_FAILURE' })
-      throw error
-    }
+ const login = async (email: string, password: string) => {
+  dispatch({ type: 'AUTH_START' })
+  try {
+    const response = await axios.post(`${API_BASE_URL}/signin`, {
+      email,
+      password,
+    })
+
+    const { user, accessToken, refreshToken } = response.data
+    localStorage.setItem('user', JSON.stringify(user))
+    localStorage.setItem('accessToken', accessToken)
+    localStorage.setItem('refreshToken', refreshToken)
+
+    dispatch({ type: 'AUTH_SUCCESS', payload: user })
+  } catch (error) {
+    dispatch({ type: 'AUTH_FAILURE' })
+    throw error
   }
+}
 
   const signup = async (name: string, email: string, password: string) => {
-    dispatch({ type: 'AUTH_START' })
-    try {
-      const response = await axios.post(`${API_BASE_URL}/signup`, {
-        fullName: name,
-        email,
-        password,
-        confirmPassword: password
-      })
-      const user = response.data.user
-      localStorage.setItem('user', JSON.stringify(user))
-      dispatch({ type: 'AUTH_SUCCESS', payload: user })
-    } catch (error) {
-      dispatch({ type: 'AUTH_FAILURE' })
-      throw error
-    }
-  }
+  dispatch({ type: 'AUTH_START' })
+  try {
+    const response = await axios.post(`${API_BASE_URL}/signup`, {
+      fullName: name,
+      email,
+      password,
+      confirmPassword: password,
+    })
 
-  const logout = () => {
-    localStorage.removeItem('user')
-    dispatch({ type: 'LOGOUT' })
+    const { user, accessToken, refreshToken } = response.data
+    localStorage.setItem('user', JSON.stringify(user))
+    localStorage.setItem('accessToken', accessToken)
+    localStorage.setItem('refreshToken', refreshToken)
+
+    dispatch({ type: 'AUTH_SUCCESS', payload: user })
+  } catch (error) {
+    dispatch({ type: 'AUTH_FAILURE' })
+    throw error
   }
+}
+
+ const logout = () => {
+  localStorage.removeItem('user')
+  localStorage.removeItem('accessToken')
+  localStorage.removeItem('refreshToken')
+  dispatch({ type: 'LOGOUT' })
+}
 
   // The key change is here - we spread the entire state object
   // which includes user, isAuthenticated, AND loading
