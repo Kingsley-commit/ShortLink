@@ -3,16 +3,17 @@ import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 
-// Extend Request type to include userId
-interface AuthenticatedRequest extends Request {
+
+export interface AuthenticatedRequest extends Request {
   userId?: string;
 }
 
-export const authenticate = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const authenticate = (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
   const token = req.headers.authorization?.split(' ')[1];
 
   if (!token) {
-    return res.status(401).json({ error: 'Authentication required' });
+    res.status(401).json({ error: 'Authentication required' });
+    return;
   }
 
   try {
@@ -21,5 +22,6 @@ export const authenticate = (req: AuthenticatedRequest, res: Response, next: Nex
     next();
   } catch (error) {
     res.status(403).json({ error: 'Invalid or expired token' });
+    return;
   }
 };

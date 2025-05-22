@@ -4,6 +4,7 @@ interface UrlEntry {
   shortCode: string;
   createdAt: Date;
   visits: number;
+  userId: string;
 }
 
 class UrlModel {
@@ -15,7 +16,7 @@ class UrlModel {
     this.codeToId = new Map();
   }
 
-  create(longUrl: string, shortCode: string): UrlEntry {
+  create(longUrl: string, shortCode: string, userId: string): UrlEntry {
     const id = Date.now().toString();
     const newEntry: UrlEntry = {
       id,
@@ -23,6 +24,7 @@ class UrlModel {
       shortCode,
       createdAt: new Date(),
       visits: 0,
+      userId, 
     };
     this.urls.set(id, newEntry);
     this.codeToId.set(shortCode, id);
@@ -48,11 +50,30 @@ class UrlModel {
     return Array.from(this.urls.values());
   }
 
-  search(query: string): UrlEntry[] {
+  
+  findByUserId(userId: string): UrlEntry[] {
+    return this.findAll().filter(entry => entry.userId === userId);
+  }
+
+  
+  search(query: string, userId?: string): UrlEntry[] {
     const lowerQuery = query.toLowerCase();
-    return this.findAll().filter(entry => 
+    let entries = this.findAll();
+    
+    
+    if (userId) {
+      entries = entries.filter(entry => entry.userId === userId);
+    }
+    
+    return entries.filter(entry =>
       entry.longUrl.toLowerCase().includes(lowerQuery)
     );
+  }
+
+  
+  isOwner(shortCode: string, userId: string): boolean {
+    const entry = this.findByShortCode(shortCode);
+    return entry ? entry.userId === userId : false;
   }
 }
 

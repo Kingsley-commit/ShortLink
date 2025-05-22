@@ -1,13 +1,24 @@
 import { Request, Response } from 'express';
 import urlService from '../services/url.service';
 
+
+interface AuthenticatedRequest extends Request {
+  userId?: string;
+}
+
 class UrlController {
-  async encodeUrl(req: Request, res: Response): Promise<void> {
+  async encodeUrl(req: AuthenticatedRequest, res: Response): Promise<void> {
     try {
       const { longUrl, customCode } = req.body;
+      const userId = req.userId; 
 
       if (!longUrl) {
         res.status(400).json({ error: 'longUrl is required' });
+        return;
+      }
+
+      if (!userId) {
+        res.status(401).json({ error: 'Authentication required' });
         return;
       }
 
@@ -18,10 +29,10 @@ class UrlController {
           return;
         }
 
-        const { shortUrl } = await urlService.shortenUrl(req, longUrl, customCode);
+        const { shortUrl } = await urlService.shortenUrl(req, longUrl, userId, customCode);
         res.json({ shortCode: customCode, shortUrl });
       } else {
-        const { shortCode, shortUrl } = await urlService.shortenUrl(req, longUrl);
+        const { shortCode, shortUrl } = await urlService.shortenUrl(req, longUrl, userId);
         res.json({ shortCode, shortUrl });
       }
     } catch (error) {
@@ -61,13 +72,21 @@ class UrlController {
     }
   }
 
-  async getStats(req: Request, res: Response): Promise<void> {
+  async getStats(req: AuthenticatedRequest, res: Response): Promise<void> {
     try {
       const { shortCode } = req.params;
-     const stats = urlService.getUrlStats(shortCode, req)
+      const userId = req.userId;
+
+      if (!userId) {
+        res.status(401).json({ error: 'Authentication required' });
+        return;
+      }
+
+      
+      const stats = urlService.getUrlStats(shortCode, req, userId);
 
       if (!stats) {
-        res.status(404).json({ error: 'URL not found' });
+        res.status(404).json({ error: 'URL not found or access denied' });
         return;
       }
 
@@ -77,24 +96,40 @@ class UrlController {
     }
   }
 
-  async listUrls(req: Request, res: Response): Promise<void> {
+  async listUrls(req: AuthenticatedRequest, res: Response): Promise<void> {
     try {
-      const urls = urlService.getAllUrls(req); // ✅ pass req to build dynamic base URL
+      const userId = req.userId;
+
+      if (!userId) {
+        res.status(401).json({ error: 'Authentication required' });
+        return;
+      }
+
+      // Only get URLs created by the authenticated user
+      const urls = urlService.getAllUrls(req, userId);
       res.json(urls);
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });
     }
   }
 
-  async searchUrls(req: Request, res: Response): Promise<void> {
+  async searchUrls(req: AuthenticatedRequest, res: Response): Promise<void> {
     try {
       const { query } = req.query;
+      const userId = req.userId;
+
+      if (!userId) {
+        res.status(401).json({ error: 'Authentication required' });
+        return;
+      }
+
       if (typeof query !== 'string' || query.length < 3) {
         res.status(400).json({ error: 'Query must be at least 3 characters' });
         return;
       }
 
-      const results = urlService.searchUrls(query);
+      // Only search within user's own URLs
+      const results = urlService.searchUrls(query, userId);
       res.json(results);
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });

@@ -9,10 +9,11 @@ class UrlService {
     }
     return result;
   }
-
+      
   async shortenUrl(
     req: any,
     longUrl: string,
+    userId: string, // Add userId parameter
     customCode?: string
   ): Promise<{ shortCode: string; shortUrl: string }> {
     try {
@@ -30,7 +31,8 @@ class UrlService {
         throw new Error('Short code already in use');
       }
 
-      const created = await urlModel.create(longUrl, shortCode);
+      // Pass userId to create method
+      const created = await urlModel.create(longUrl, shortCode, userId);
       if (!created) {
         throw new Error('Failed to create URL entry');
       }
@@ -59,9 +61,14 @@ class UrlService {
     return entry.longUrl;
   }
 
-  getUrlStats(shortCode: string, req: any) {
+  getUrlStats(shortCode: string, req: any, userId?: string) {
     const entry = urlModel.findByShortCode(shortCode);
     if (!entry) return null;
+
+    // If userId is provided, check if user owns this URL
+    if (userId && entry.userId !== userId) {
+      return null; // User doesn't own this URL
+    }
 
     const baseUrl = `${req.protocol}://${req.get('host')}`;
 
@@ -74,19 +81,27 @@ class UrlService {
     };
   }
 
-  getAllUrls(req: any) {
+  // Updated to get URLs for specific user only
+  getAllUrls(req: any, userId: string) {
     const baseUrl = `${req.protocol}://${req.get('host')}`;
-    return urlModel.findAll().map(entry => ({
+    return urlModel.findByUserId(userId).map(entry => ({
       longUrl: entry.longUrl,
       shortUrl: `${baseUrl}/${entry.shortCode}`,
+      shortCode: entry.shortCode,
       visits: entry.visits,
       createdAt: entry.createdAt,
     }));
   }
 
-  searchUrls(query: string) {
+  // Updated to search within user's URLs only
+  searchUrls(query: string, userId: string) {
     if (query.length < 3) return [];
-    return urlModel.search(query);
+    return urlModel.search(query, userId);
+  }
+
+  // New method to check URL ownership
+  checkUrlOwnership(shortCode: string, userId: string): boolean {
+    return urlModel.isOwner(shortCode, userId);
   }
 }
 
