@@ -14,7 +14,7 @@ export const UrlForm = ({ onSubmit, loading = false }: {
   const validateUrl = (url: string): boolean => {
     try {
       const parsedUrl = new URL(url);
-      return parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:';
+      return parsedUrl.protocol === 'https:' || parsedUrl.protocol === 'https:';
     } catch {
       return false;
     }
