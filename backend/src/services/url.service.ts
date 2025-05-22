@@ -13,7 +13,7 @@ class UrlService {
   async shortenUrl(
     req: any,
     longUrl: string,
-    userId: string, // Add userId parameter
+    userId: string, 
     customCode?: string
   ): Promise<{ shortCode: string; shortUrl: string }> {
     try {
@@ -31,7 +31,7 @@ class UrlService {
         throw new Error('Short code already in use');
       }
 
-      // Pass userId to create method
+      
       const created = await urlModel.create(longUrl, shortCode, userId);
       if (!created) {
         throw new Error('Failed to create URL entry');
@@ -65,9 +65,9 @@ class UrlService {
     const entry = urlModel.findByShortCode(shortCode);
     if (!entry) return null;
 
-    // If userId is provided, check if user owns this URL
+    
     if (userId && entry.userId !== userId) {
-      return null; // User doesn't own this URL
+      return null; 
     }
 
     const baseUrl = `${req.protocol}://${req.get('host')}`;
@@ -81,7 +81,7 @@ class UrlService {
     };
   }
 
-  // Updated to get URLs for specific user only
+
   getAllUrls(req: any, userId: string) {
     const baseUrl = `${req.protocol}://${req.get('host')}`;
     return urlModel.findByUserId(userId).map(entry => ({
@@ -93,13 +93,13 @@ class UrlService {
     }));
   }
 
-  // Updated to search within user's URLs only
+  
   searchUrls(query: string, userId: string) {
     if (query.length < 3) return [];
     return urlModel.search(query, userId);
   }
 
-  // New method to check URL ownership
+  
   checkUrlOwnership(shortCode: string, userId: string): boolean {
     return urlModel.isOwner(shortCode, userId);
   }

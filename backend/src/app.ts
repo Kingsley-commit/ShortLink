@@ -11,7 +11,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 
-app.use('/', router);
+app.use('/api', router);
 app.use("/api/auth", authRoutes)
 
 
