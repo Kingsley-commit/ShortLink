@@ -154,7 +154,7 @@ export const UrlForm = ({ onSubmit, loading = false }: {
                   transition={{ duration: 0.3 }}
                   className="mt-6"
                 >
-                  <label className="block text-sm font-medium text-indigo-800 mb-2 ml-1">
+                  <label className="block text-sm font-medium text-white mb-2 ml-1">
                     Customize your short URL
                   </label>
                   <input
