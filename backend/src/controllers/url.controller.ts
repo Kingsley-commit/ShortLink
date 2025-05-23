@@ -17,7 +17,7 @@ class UrlController {
       }
 
       if (!userId) {
-        res.status(401).json({ error: 'Authentication required' });
+        res.status(401).json({ error: 'Sign In To Access The Url Shortner' });
         return;
       }
 
