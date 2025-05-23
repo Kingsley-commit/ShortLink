@@ -117,7 +117,7 @@ Ensure all tests pass before deploying or pushing changes.
 
 ## Deployment
 
-ShortLink is deployed and accessible at [https://shortlnk.live](https://get.shortlnk.live). You can try the live demo to shorten URLs and explore all features. The source code for this project is available on GitHub: [https://github.com/Kingsley-commit/ShortLink](https://github.com/Kingsley-commit/ShortLink).
+ShortLink is deployed and accessible at [https://get.shortlnk.live](https://get.shortlnk.live). You can try the live demo to shorten URLs and explore all features. The source code for this project is available on GitHub: [https://github.com/Kingsley-commit/ShortLink](https://github.com/Kingsley-commit/ShortLink).
 
 ---
 
