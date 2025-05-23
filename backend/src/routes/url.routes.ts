@@ -4,9 +4,6 @@ import { authenticate, AuthenticatedRequest } from '../middleware/authMiddleware
 
 const router = Router();
 
-router.get('/', (req, res) => {
-  res.redirect('https://get.shortlnk.live'); 
-});
 
 
 router.post('/encode', authenticate, (req: AuthenticatedRequest, res) => {

@@ -29,19 +29,19 @@ class UrlService {
       let shortCode = customCode;
       
       if (!shortCode) {
-        // Generate a unique short code
+       
         do {
           shortCode = this.generateShortCode();
         } while (await this.findByShortCode(shortCode));
       } else {
-        // Check if custom code already exists
+        
         const existing = await this.findByShortCode(shortCode);
         if (existing) {
           throw new Error('Short code already in use');
         }
       }
 
-      // Create new URL entry in database
+  
       const newUrl = new Url({
         longUrl,
         shortCode,
@@ -76,7 +76,7 @@ class UrlService {
       const entry = await this.findByShortCode(shortCode);
       if (!entry) return null;
 
-      // Increment visits
+     
       await this.incrementVisits(shortCode);
       return entry.longUrl;
     } catch (error) {
@@ -90,7 +90,7 @@ class UrlService {
       const entry = await this.findByShortCode(shortCode);
       if (!entry) return null;
 
-      // Check ownership if userId is provided
+     
       if (userId && entry.userId.toString() !== userId) {
         return null;
       }
@@ -114,7 +114,7 @@ class UrlService {
   async getAllUrls(req: any, userId: string) {
     try {
       const urls = await Url.find({ userId: new Types.ObjectId(userId) })
-        .sort({ createdAt: -1 }); // Sort by newest first
+        .sort({ createdAt: -1 }); 
 
       const baseUrl = `${req.protocol}://${req.get('host')}`;
       
@@ -137,7 +137,7 @@ class UrlService {
       
       const urls = await Url.find({
         userId: new Types.ObjectId(userId),
-        longUrl: { $regex: query, $options: 'i' } // Case-insensitive search
+        longUrl: { $regex: query, $options: 'i' } 
       }).sort({ createdAt: -1 });
 
       return urls.map(entry => ({

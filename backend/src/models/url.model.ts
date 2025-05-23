@@ -11,19 +11,19 @@ export interface IUrl extends Document {
 
 const urlSchema = new Schema<IUrl>({
   longUrl: { type: String, required: true },
-  shortCode: { type: String, required: true, unique: true }, // This already creates an index
+  shortCode: { type: String, required: true, unique: true },
   createdAt: { type: Date, default: Date.now },
   visits: { type: Number, default: 0 },
   userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
 });
 
-// Add additional indexes for better performance
+
 urlSchema.index({ userId: 1 });
-urlSchema.index({ longUrl: 'text' }); // For text search
+urlSchema.index({ longUrl: 'text' }); 
 
 export const Url = model<IUrl>('Url', urlSchema);
 
-// Keep the old interface for backward compatibility if needed
+
 export interface UrlEntry {
   id: string;
   longUrl: string;

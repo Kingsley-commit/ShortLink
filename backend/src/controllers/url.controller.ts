@@ -16,6 +16,7 @@ class UrlController {
         return;
       }
 
+      
       if (!userId) {
         res.status(401).json({ error: 'Sign In To Access The Url Shortner' });
         return;
@@ -43,7 +44,7 @@ class UrlController {
   async decodeUrl(req: Request, res: Response): Promise<void> {
     try {
       const { shortCode } = req.params;
-      const longUrl = await urlService.getLongUrl(shortCode); // Added await
+      const longUrl = await urlService.getLongUrl(shortCode); 
 
       if (!longUrl) {
         res.status(404).json({ error: 'URL not found' });
@@ -60,7 +61,7 @@ class UrlController {
   async redirect(req: Request, res: Response): Promise<void> {
     try {
       const { shortCode } = req.params;
-      const longUrl = await urlService.getLongUrl(shortCode); // Added await
+      const longUrl = await urlService.getLongUrl(shortCode); 
 
       if (!longUrl) {
         res.status(404).json({ error: 'URL not found' });
@@ -84,7 +85,7 @@ class UrlController {
         return;
       }
 
-      const stats = await urlService.getUrlStats(shortCode, req, userId); // Added await
+      const stats = await urlService.getUrlStats(shortCode, req, userId); 
 
       if (!stats) {
         res.status(404).json({ error: 'URL not found or access denied' });
@@ -107,8 +108,8 @@ class UrlController {
         return;
       }
 
-      // Only get URLs created by the authenticated user
-      const urls = await urlService.getAllUrls(req, userId); // Added await
+      
+      const urls = await urlService.getAllUrls(req, userId);
       res.json(urls);
     } catch (error) {
       console.error('Error listing URLs:', error);
@@ -131,8 +132,8 @@ class UrlController {
         return;
       }
 
-      // Only search within user's own URLs
-      const results = await urlService.searchUrls(query, userId); // Added await
+      
+      const results = await urlService.searchUrls(query, userId); 
       res.json(results);
     } catch (error) {
       console.error('Error searching URLs:', error);
