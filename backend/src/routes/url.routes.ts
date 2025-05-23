@@ -13,6 +13,7 @@ router.post('/encode', authenticate, (req: AuthenticatedRequest, res) => {
   urlController.encodeUrl(req, res);
 });
 
+
 router.get('/statistic/:shortCode', authenticate, (req: AuthenticatedRequest, res) => {
   urlController.getStats(req, res);
 });

@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import urlService from '../services/url.service';
 
-
 interface AuthenticatedRequest extends Request {
   userId?: string;
 }
@@ -10,7 +9,7 @@ class UrlController {
   async encodeUrl(req: AuthenticatedRequest, res: Response): Promise<void> {
     try {
       const { longUrl, customCode } = req.body;
-      const userId = req.userId; 
+      const userId = req.userId;
 
       if (!longUrl) {
         res.status(400).json({ error: 'longUrl is required' });
@@ -25,7 +24,7 @@ class UrlController {
       if (customCode) {
         const existing = await urlService.getLongUrl(customCode);
         if (existing) {
-          res.status(400).json({ error: 'Url is already taken' });
+          res.status(400).json({ error: 'Custom code is already taken' });
           return;
         }
 
@@ -36,6 +35,7 @@ class UrlController {
         res.json({ shortCode, shortUrl });
       }
     } catch (error) {
+      console.error('Error encoding URL:', error);
       res.status(500).json({ error: 'Internal server error' });
     }
   }
@@ -43,7 +43,7 @@ class UrlController {
   async decodeUrl(req: Request, res: Response): Promise<void> {
     try {
       const { shortCode } = req.params;
-      const longUrl = urlService.getLongUrl(shortCode);
+      const longUrl = await urlService.getLongUrl(shortCode); // Added await
 
       if (!longUrl) {
         res.status(404).json({ error: 'URL not found' });
@@ -52,6 +52,7 @@ class UrlController {
 
       res.json({ longUrl });
     } catch (error) {
+      console.error('Error decoding URL:', error);
       res.status(500).json({ error: 'Internal server error' });
     }
   }
@@ -59,7 +60,7 @@ class UrlController {
   async redirect(req: Request, res: Response): Promise<void> {
     try {
       const { shortCode } = req.params;
-      const longUrl = urlService.getLongUrl(shortCode);
+      const longUrl = await urlService.getLongUrl(shortCode); // Added await
 
       if (!longUrl) {
         res.status(404).json({ error: 'URL not found' });
@@ -68,6 +69,7 @@ class UrlController {
 
       res.redirect(301, longUrl);
     } catch (error) {
+      console.error('Error redirecting:', error);
       res.status(500).json({ error: 'Internal server error' });
     }
   }
@@ -82,8 +84,7 @@ class UrlController {
         return;
       }
 
-      
-      const stats = urlService.getUrlStats(shortCode, req, userId);
+      const stats = await urlService.getUrlStats(shortCode, req, userId); // Added await
 
       if (!stats) {
         res.status(404).json({ error: 'URL not found or access denied' });
@@ -92,6 +93,7 @@ class UrlController {
 
       res.json(stats);
     } catch (error) {
+      console.error('Error getting stats:', error);
       res.status(500).json({ error: 'Internal server error' });
     }
   }
@@ -106,9 +108,10 @@ class UrlController {
       }
 
       // Only get URLs created by the authenticated user
-      const urls = urlService.getAllUrls(req, userId);
+      const urls = await urlService.getAllUrls(req, userId); // Added await
       res.json(urls);
     } catch (error) {
+      console.error('Error listing URLs:', error);
       res.status(500).json({ error: 'Internal server error' });
     }
   }
@@ -129,9 +132,10 @@ class UrlController {
       }
 
       // Only search within user's own URLs
-      const results = urlService.searchUrls(query, userId);
+      const results = await urlService.searchUrls(query, userId); // Added await
       res.json(results);
     } catch (error) {
+      console.error('Error searching URLs:', error);
       res.status(500).json({ error: 'Internal server error' });
     }
   }

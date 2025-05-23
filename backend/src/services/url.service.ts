@@ -1,4 +1,5 @@
-import urlModel from '../models/url.model';
+import { Url, IUrl } from '../models/url.model';
+import { Types } from 'mongoose';
 
 class UrlService {
   private generateShortCode(): string {
@@ -9,11 +10,11 @@ class UrlService {
     }
     return result;
   }
-      
+
   async shortenUrl(
     req: any,
     longUrl: string,
-    userId: string, 
+    userId: string,
     customCode?: string
   ): Promise<{ shortCode: string; shortUrl: string }> {
     try {
@@ -25,14 +26,31 @@ class UrlService {
         throw new Error('URL too long');
       }
 
-      const shortCode = customCode || this.generateShortCode();
-      const existing = await urlModel.findByShortCode(shortCode);
-      if (existing) {
-        throw new Error('Short code already in use');
+      let shortCode = customCode;
+      
+      if (!shortCode) {
+        // Generate a unique short code
+        do {
+          shortCode = this.generateShortCode();
+        } while (await this.findByShortCode(shortCode));
+      } else {
+        // Check if custom code already exists
+        const existing = await this.findByShortCode(shortCode);
+        if (existing) {
+          throw new Error('Short code already in use');
+        }
       }
 
-      
-      const created = await urlModel.create(longUrl, shortCode, userId);
+      // Create new URL entry in database
+      const newUrl = new Url({
+        longUrl,
+        shortCode,
+        userId: new Types.ObjectId(userId),
+        visits: 0,
+        createdAt: new Date()
+      });
+
+      const created = await newUrl.save();
       if (!created) {
         throw new Error('Failed to create URL entry');
       }
@@ -53,55 +71,120 @@ class UrlService {
     }
   }
 
-  getLongUrl(shortCode: string): string | null {
-    const entry = urlModel.findByShortCode(shortCode);
-    if (!entry) return null;
+  async getLongUrl(shortCode: string): Promise<string | null> {
+    try {
+      const entry = await this.findByShortCode(shortCode);
+      if (!entry) return null;
 
-    urlModel.incrementVisits(shortCode);
-    return entry.longUrl;
-  }
-
-  getUrlStats(shortCode: string, req: any, userId?: string) {
-    const entry = urlModel.findByShortCode(shortCode);
-    if (!entry) return null;
-
-    
-    if (userId && entry.userId !== userId) {
-      return null; 
+      // Increment visits
+      await this.incrementVisits(shortCode);
+      return entry.longUrl;
+    } catch (error) {
+      console.error('Error getting long URL:', error);
+      return null;
     }
-
-    const baseUrl = `${req.protocol}://${req.get('host')}`;
-
-    return {
-      longUrl: entry.longUrl,
-      shortUrl: `${baseUrl}/${entry.shortCode}`,
-      visits: entry.visits,
-      createdAt: entry.createdAt,
-      lastVisit: entry.visits > 0 ? new Date() : null,
-    };
   }
 
+  async getUrlStats(shortCode: string, req: any, userId?: string) {
+    try {
+      const entry = await this.findByShortCode(shortCode);
+      if (!entry) return null;
 
-  getAllUrls(req: any, userId: string) {
-    const baseUrl = `${req.protocol}://${req.get('host')}`;
-    return urlModel.findByUserId(userId).map(entry => ({
-      longUrl: entry.longUrl,
-      shortUrl: `${baseUrl}/${entry.shortCode}`,
-      shortCode: entry.shortCode,
-      visits: entry.visits,
-      createdAt: entry.createdAt,
-    }));
+      // Check ownership if userId is provided
+      if (userId && entry.userId.toString() !== userId) {
+        return null;
+      }
+
+      const baseUrl = `${req.protocol}://${req.get('host')}`;
+
+      return {
+        longUrl: entry.longUrl,
+        shortUrl: `${baseUrl}/${entry.shortCode}`,
+        shortCode: entry.shortCode,
+        visits: entry.visits,
+        createdAt: entry.createdAt,
+        lastVisit: entry.visits > 0 ? new Date() : null,
+      };
+    } catch (error) {
+      console.error('Error getting URL stats:', error);
+      return null;
+    }
   }
 
-  
-  searchUrls(query: string, userId: string) {
-    if (query.length < 3) return [];
-    return urlModel.search(query, userId);
+  async getAllUrls(req: any, userId: string) {
+    try {
+      const urls = await Url.find({ userId: new Types.ObjectId(userId) })
+        .sort({ createdAt: -1 }); // Sort by newest first
+
+      const baseUrl = `${req.protocol}://${req.get('host')}`;
+      
+      return urls.map(entry => ({
+        longUrl: entry.longUrl,
+        shortUrl: `${baseUrl}/${entry.shortCode}`,
+        shortCode: entry.shortCode,
+        visits: entry.visits,
+        createdAt: entry.createdAt,
+      }));
+    } catch (error) {
+      console.error('Error getting all URLs:', error);
+      return [];
+    }
   }
 
-  
-  checkUrlOwnership(shortCode: string, userId: string): boolean {
-    return urlModel.isOwner(shortCode, userId);
+  async searchUrls(query: string, userId: string) {
+    try {
+      if (query.length < 3) return [];
+      
+      const urls = await Url.find({
+        userId: new Types.ObjectId(userId),
+        longUrl: { $regex: query, $options: 'i' } // Case-insensitive search
+      }).sort({ createdAt: -1 });
+
+      return urls.map(entry => ({
+        id: entry._id,
+        longUrl: entry.longUrl,
+        shortCode: entry.shortCode,
+        visits: entry.visits,
+        createdAt: entry.createdAt,
+      }));
+    } catch (error) {
+      console.error('Error searching URLs:', error);
+      return [];
+    }
+  }
+
+  async checkUrlOwnership(shortCode: string, userId: string): Promise<boolean> {
+    try {
+      const entry = await Url.findOne({ 
+        shortCode, 
+        userId: new Types.ObjectId(userId) 
+      });
+      return !!entry;
+    } catch (error) {
+      console.error('Error checking URL ownership:', error);
+      return false;
+    }
+  }
+
+  // Helper methods
+  private async findByShortCode(shortCode: string): Promise<IUrl | null> {
+    try {
+      return await Url.findOne({ shortCode });
+    } catch (error) {
+      console.error('Error finding by short code:', error);
+      return null;
+    }
+  }
+
+  private async incrementVisits(shortCode: string): Promise<void> {
+    try {
+      await Url.findOneAndUpdate(
+        { shortCode },
+        { $inc: { visits: 1 } }
+      );
+    } catch (error) {
+      console.error('Error incrementing visits:', error);
+    }
   }
 }
 
