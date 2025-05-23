@@ -1,7 +1,7 @@
 # ShortLink
 **ShortLink** is a user-friendly URL shortening web application that provides instant redirection. Guest users can quickly generate basic short links, while registered users gain additional features such as custom URL aliases, branded QR codes, and a searchable dashboard with visit statistics.<br><br>
 **Figure 1:** <br>
-<i>Website Home Page (visit: https://get.shortlnk.live</i><br>
+<i>Website Home Page (visit: https://get.shortlnk.live)</i><br>
 ![image](https://github.com/user-attachments/assets/493fb153-cf8f-412f-9501-0e907dac0343)<br>
 ## Technology Stack
 * **Backend:** Node.js, Express.js (follows the MVC pattern)
@@ -97,11 +97,16 @@ This organization keeps the code modular and maintainable. Each API endpoint (un
 
 ## Testing
 
-Automated tests are written using **Jest** and **Supertest** for the API. To run the tests, use:
+Unit and Integration tests are written using **Jest** and **Supertest** for the API. 
+
+To run the tests, use:
 
 ```bash
 npm test
 ```
+**Figure 3:** <br>
+<i>Encode and Decode Test Result</i><br>
+![image](https://github.com/user-attachments/assets/33a9d8c4-5ec1-4606-a283-2b178e68353b)<br>
 
 in the `backend` directory. Key tests include:
 
@@ -112,7 +117,7 @@ Ensure all tests pass before deploying or pushing changes.
 
 ## Deployment
 
-ShortLink is deployed and accessible at [https://shortlnk.live](https://shortlnk.live). You can try the live demo to shorten URLs and explore all features. The source code for this project is available on GitHub: [https://github.com/Kingsley-commit/ShortLink](https://github.com/Kingsley-commit/ShortLink).
+ShortLink is deployed and accessible at [https://shortlnk.live](https://get.shortlnk.live). You can try the live demo to shorten URLs and explore all features. The source code for this project is available on GitHub: [https://github.com/Kingsley-commit/ShortLink](https://github.com/Kingsley-commit/ShortLink).
 
 ---
 
