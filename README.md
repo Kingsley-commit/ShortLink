@@ -1,5 +1,5 @@
 # ShortLink
-**ShortLink** is a user-friendly URL shortening web application that provides instant redirection. Guest users can quickly generate basic short links, while registered users gain additional features such as custom URL aliases, branded QR codes, and a searchable dashboard with visit statistics.<br><br>
+**ShortLink** is a user-friendly URL shortening web application that provides instant redirection. Registered users can quickly generate basic short links, gain additional features such as custom URL aliases, branded QR codes, and a searchable dashboard with visit statistics.<br><br>
 **Figure 1:** <br>
 <i>Website Home Page (visit: https://get.shortlnk.live)</i><br>
 ![image](https://github.com/user-attachments/assets/493fb153-cf8f-412f-9501-0e907dac0343)<br>
