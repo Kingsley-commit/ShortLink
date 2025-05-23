@@ -1,5 +1,7 @@
 # ShortLink
 **ShortLink** is a user-friendly URL shortening web application that provides instant redirection. Guest users can quickly generate basic short links, while registered users gain additional features such as custom URL aliases, branded QR codes, and a searchable dashboard with visit statistics.<br><br>
+**Figure 1:** <br>
+<i>Website Home Page (visit: https://get.shortlnk.live</i><br>
 ![image](https://github.com/user-attachments/assets/493fb153-cf8f-412f-9501-0e907dac0343)<br>
 ## Technology Stack
 * **Backend:** Node.js, Express.js (follows the MVC pattern)
@@ -9,19 +11,16 @@
 * **Testing:** Jest and Supertest for automated API testing
 
 ## Application User Flow Diagram
-**Figure 1:** <br>
-<i>Guest User Flow Diagram</i><br>
-![image](https://github.com/user-attachments/assets/7620587b-4ad8-4979-8175-9e9292351af4)<br>
 **Figure 2:** <br>
 <i>Registered User Flow Diagram</i><br>
-![image](https://github.com/user-attachments/assets/f8723934-a1f3-4414-a0f7-026bbfa99928)
+![image](https://github.com/user-attachments/assets/f8723934-a1f3-4414-a0f7-026bbfa99928)<br>
 
 ## Features
-* Shorten long URLs into compact links (guest and registered users)
-* Instant redirection to original URLs (guest and registered users)
-* Custom alias creation (registered users)
-* Branded QR code generation (registered users)
-* Dashboard with link management and visit statistics (registered users)
+* Shorten long URLs into compact links 
+* Instant redirection to original URLs 
+* Custom alias creation 
+* Branded QR code generation
+* Dashboard with link management and visit statistics 
 * Search functionality to filter links in the dashboard
 
 ## Setup and Installation
