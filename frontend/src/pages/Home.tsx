@@ -157,7 +157,7 @@ export default function Home() {
             <p className="text-lg sm:text-xl md:text-2xl pt-4 w-full sm:w-[34rem]">Welcome to Shortlink, the smart, secure, and dynamic solution for shortening your links.</p>
 
             <motion.div 
-              className="w-full max-w-md mx-auto sm:mx-4 mt-[3rem]"
+              className="w-full max-w-md mx-auto mx-4 md:mx-0 mt-[3rem]"
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
@@ -289,7 +289,7 @@ export default function Home() {
         
       </motion.div>
 
-      <div className="h-[3rem] flex justify-center align-center text-white">Powered BY &nbsp;<Link to="https://skilvorax.com" className="font-bold">SkilvoraX</Link></div>
+      <div className="h-[3rem] flex justify-center align-center text-white">Powered by &nbsp;<Link to="https://skilvorax.com" className="font-bold">SkilvoraX</Link></div>
     </div>
   );
 }

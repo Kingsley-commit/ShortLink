@@ -211,7 +211,7 @@ const Signup = () => {
           </motion.div>
         </motion.div>
       </div>
-      <div className="h-[2rem] flex justify-center align-center text-[#012945] mt-[20px]">Powered BY &nbsp;<Link to="https://skilvorax.com" className="font-bold">SkilvoraX</Link></div>
+      <div className="h-[2rem] flex justify-center align-center text-[#012945] mt-[20px]">Powered by &nbsp;<Link to="https://skilvorax.com" className="font-bold">SkilvoraX</Link></div>
     </div>
   )
 }

@@ -1,3 +1,5 @@
+import { GoogleLogin } from '@react-oauth/google';
+import {jwtDecode} from 'jwt-decode';
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useAuth } from '../../context/AuthContext'
@@ -11,7 +13,7 @@ const Login = () => {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
-  const { login, loading } = useAuth()
+  const { login, googleAuth, loading } = useAuth()
   const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -134,6 +136,22 @@ const Login = () => {
               </>
             )}
           </motion.button>
+          <div className="mt-4 flex justify-center">
+            <GoogleLogin
+              onSuccess={credentialResponse => {
+                if (credentialResponse.credential) {
+                  const decoded: any = jwtDecode(credentialResponse.credential);
+                  const name = decoded.name;
+                  const email = decoded.email;
+
+                  googleAuth(name, email)
+                    .then(() => navigate('/dashboard'))
+                    .catch(() => setError('Google login failed'));
+                }
+              }}
+              onError={() => setError('Google login failed')}
+            />
+          </div>
         </form>
 
         <motion.div variants={itemVariants} className="mt-8 text-center">
@@ -148,7 +166,7 @@ const Login = () => {
           </p>
         </motion.div>
       </motion.div>
-      <div className="h-[2rem] flex justify-center align-center text-white mt-[20px]">Powered BY &nbsp;<b className="">SkilvoraX</b></div>
+      <div className="h-[2rem] flex justify-center align-center text-white mt-[20px]">Powered by &nbsp;<Link to="https://skilvorax.com" className="font-bold">SkilvoraX</Link></div>
     </div>
   )
 }

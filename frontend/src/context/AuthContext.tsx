@@ -19,6 +19,7 @@ interface AuthState {
 
 interface AuthContextType extends AuthState {
   login: (email: string, password: string) => Promise<void>
+  googleAuth: (name: string, email: string) => Promise<void>
   signup: (name: string, email: string, password: string) => Promise<void>
   logout: () => void
 }
@@ -98,6 +99,46 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 }
 
+const googleAuth = async (name: string, email: string) => {
+  dispatch({ type: "AUTH_START" });
+  try {
+    // 1. Generate a strong random password
+    const password = email+"@#.37eis*";
+
+    // 2. TRY to sign up (if user exists, backend will return error)
+    try {
+      await axios.post(`${API_BASE_URL}/signup`, {
+        fullName: name,
+        email,
+        password,
+        confirmPassword: password,
+      });
+    } catch (err: any) {
+      // User already exists → ignore signup error
+      if (!err.response || err.response.status !== 400) {
+        throw err;
+      }
+    }
+
+    // 3. Now login with the generated password
+    const loginResponse = await axios.post(`${API_BASE_URL}/signin`, {
+      email,
+      password,
+    });
+
+    const { user, accessToken, refreshToken } = loginResponse.data;
+
+    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("refreshToken", refreshToken);
+
+    dispatch({ type: "AUTH_SUCCESS", payload: user });
+  } catch (error) {
+    dispatch({ type: "AUTH_FAILURE" });
+    throw error;
+  }
+};
+
   const signup = async (name: string, email: string, password: string) => {
   dispatch({ type: 'AUTH_START' })
   try {
@@ -133,6 +174,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     <AuthContext.Provider value={{
       ...state, // This includes all state properties
       login,
+      googleAuth,
       signup,
       logout
     }}>
