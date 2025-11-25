@@ -19,7 +19,7 @@ const Header = () => {
         <Link to="/home">
           <div className="flex items-center">
             <img src={Logo} alt="Logo" className="w-6 h-6 mr-2" />
-            <h1 className="text-2xl font-bold text-[#002395]">ShortLink</h1>
+            <h1 className="text-[18px] font-bold text-[#012945]">ShortLink</h1>
           </div>
         </Link>
 
@@ -58,8 +58,8 @@ const Header = () => {
               onClick={logout}
               className="w-full flex items-center space-x-2 px-4 py-2 bg-[#002395] text-white rounded-lg hover:bg-red-600 transition-colors"
             >
-              <LogOut className="w-4 h-4" />
-              <span>Logout</span>
+              <LogOut className="w-4 h-2" />
+              <span className="text-[18px]">Logout</span>
             </button>
           </div>
         )}

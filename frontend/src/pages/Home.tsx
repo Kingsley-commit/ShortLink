@@ -5,7 +5,7 @@ import { ClipboardIcon, CheckIcon } from "lucide-react";
 import { useShortener } from "../hooks/useShortner";
 import { shortenUrl } from "../services/api"; 
 import Image from "../assets/Layer_1.svg";
-import BackGround from "../assets/Group7.svg";
+import BackGround from "../assets/Group7.png";
 import Logo from "../assets/Link.svg";
 import { Link } from "react-router-dom";
 
@@ -86,7 +86,7 @@ export default function Home() {
         <Link to='/home'>
           <div className='flex items-center'>
             <img src={Logo} alt="ShortLink Logo" />
-            <h1 className="text-2xl font-bold text-[#002395]">ShortLink</h1>
+            <h1 className="text-2xl font-bold text-[#012945]">ShortLink</h1>
           </div>
         </Link>
 
@@ -126,7 +126,7 @@ export default function Home() {
             whileTap={{ scale: 0.98 }}
             onClick={() => setIsMenuOpen(false)}
           >
-            <Link to='/signup' className="block w-full">Sign Up</Link>
+            <Link to='/signup' className="block w-full text-[#012945]">Sign Up</Link>
           </motion.button>
           <motion.button
             className="text-[#002395] px-6 py-2 rounded-2xl text-base hover:shadow-lg transition-shadow w-full text-center"
@@ -134,7 +134,7 @@ export default function Home() {
             whileTap={{ scale: 0.98 }}
             onClick={() => setIsMenuOpen(false)}
           >
-            <Link to='/login' className="block w-full">Sign In</Link>
+            <Link to='/login' className="block w-full text-[#012945]">Sign In</Link>
           </motion.button>
         </div>
       </div>
@@ -153,7 +153,7 @@ export default function Home() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <h1 className="text-4xl lg:text-5xl font-bold lg:w-full">Smart Secure & Dynamic</h1>
+            <h1 className="text-4xl lg:text-5xl font-bold lg:w-full text-[#C9F31D]">Smart Secure & Dynamic</h1>
             <p className="text-lg sm:text-xl md:text-2xl pt-4 w-full sm:w-[34rem]">Welcome to Shortlink, the smart, secure, and dynamic solution for shortening your links.</p>
 
             <motion.div 
@@ -221,8 +221,8 @@ export default function Home() {
                     disabled={isSubmitting}
                     className={`w-full py-3 px-4 rounded-lg text-white font-medium ${
                       isSubmitting
-                        ? 'bg-blue-400 cursor-not-allowed'
-                        : 'bg-blue-600 hover:bg-blue-700'
+                        ? 'bg-[#012945] cursor-not-allowed'
+                        : 'bg-[#012945] hover:bg-[#012945]'
                     }`}
                     whileHover={!isSubmitting ? { scale: 1.03 } : {}}
                     whileTap={!isSubmitting ? { scale: 0.97 } : {}}
@@ -289,7 +289,7 @@ export default function Home() {
         
       </motion.div>
 
-      <div className="h-[3rem]"></div>
+      <div className="h-[3rem] flex justify-center align-center text-white">Powered BY &nbsp;<Link to="https://skilvorax.com" className="font-bold">SkilvoraX</Link></div>
     </div>
   );
 }

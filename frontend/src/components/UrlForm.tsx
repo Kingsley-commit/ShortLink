@@ -115,10 +115,10 @@ export const UrlForm = ({ onSubmit, loading = false }: {
               <motion.button
                 type="button"
                 onClick={toggleCustomCode}
-                className="group relative inline-flex items-center justify-center px-6 py-3 overflow-hidden font-medium rounded-xl bg-gradient-to-r from-indigo-600 to-blue-500 text-white shadow-md transition-all duration-300"
+                className="group relative inline-flex items-center justify-center px-6 py-3 overflow-hidden font-medium rounded-xl bg-gradient-to-r from-blue-500 to-[#012945] text-white shadow-md transition-all duration-300"
                 whileHover={{ 
                   scale: 1.03,
-                  boxShadow: '0 10px 25px -5px rgba(79, 70, 229, 0.4)'
+                  boxShadow: '0 10px 25px -5px rgba(1, 41, 69, 1)'
                 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -198,7 +198,7 @@ export const UrlForm = ({ onSubmit, loading = false }: {
             className={`w-full py-4 px-6 rounded-2xl text-white font-medium text-lg shadow-lg transition-all duration-300 ${
               loading || isSubmitting 
                 ? 'bg-indigo-400 cursor-not-allowed' 
-                : 'bg-gradient-to-r from-indigo-600 to-blue-500 hover:from-indigo-700 hover:to-blue-600 hover:shadow-xl hover:shadow-indigo-200'
+                : 'bg-gradient-to-r from-[#012945] to-[#012945] hover:from-[#012945] hover:to-[#012945] hover:shadow-[10px] hover:shadow-[#000]'
             }`}
             disabled={loading || isSubmitting}
             whileHover={!loading && !isSubmitting ? { scale: 1.02 } : {}}
@@ -219,7 +219,7 @@ export const UrlForm = ({ onSubmit, loading = false }: {
                 </motion.span>
               </div>
             ) : (
-              <div className="flex items-center justify-center space-x-2">
+              <div className="flex items-center justify-center space-x-2 ">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                 </svg>

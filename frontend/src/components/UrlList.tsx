@@ -128,7 +128,7 @@ export const UrlList = ({ urls, loading, error, onRetry }: UrlListProps) => {
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <h3 className="text-xl font-semibold text-indigo-800">
+        <h3 className="text-xl font-semibold text-[#012945]">
           {showAll ? 'All Your Shortened URLs' : 'Your Latest Shortened URL'}
         </h3>
         
@@ -137,7 +137,7 @@ export const UrlList = ({ urls, loading, error, onRetry }: UrlListProps) => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setShowAll(!showAll)}
-            className="text-indigo-600 hover:text-indigo-800 font-medium flex items-center"
+            className="text-[#012945] hover:text-[#012945] font-medium flex items-center"
           >
             {showAll ? (
               <>
@@ -179,7 +179,7 @@ export const UrlList = ({ urls, loading, error, onRetry }: UrlListProps) => {
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                 {/* Original URL */}
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-semibold text-indigo-400 uppercase tracking-wider mb-1">Original URL</p>
+                  <p className="text-xs font-semibold text-[#012945] uppercase tracking-wider mb-1">Original URL</p>
                   <div className="flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400 mr-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
@@ -197,7 +197,7 @@ export const UrlList = ({ urls, loading, error, onRetry }: UrlListProps) => {
 
                 {/* Short URL */}
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-semibold text-indigo-400 uppercase tracking-wider mb-1">Short URL</p>
+                  <p className="text-xs font-semibold text-[#012945] uppercase tracking-wider mb-1">Short URL</p>
                   <div className="flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-indigo-500 mr-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
@@ -206,7 +206,7 @@ export const UrlList = ({ urls, loading, error, onRetry }: UrlListProps) => {
                       href={url.shortUrl} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="text-indigo-600 font-medium hover:text-indigo-800 hover:underline break-all line-clamp-1 text-sm md:text-base"
+                      className="text-[#012945] font-medium hover:text-indigo-800 hover:underline break-all line-clamp-1 text-sm md:text-base"
                     >
                       {url.shortUrl}
                     </a>

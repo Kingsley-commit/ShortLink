@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { useAuth } from '../../context/AuthContext'
 import { Link, useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, Mail, Lock, User, UserPlus } from 'lucide-react'
-import BackGround from '../../assets/Group7.svg'
+import BackGround from '../../assets/Group7.png'
 
 
 
@@ -59,7 +59,7 @@ const Signup = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-6">
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6">
       <div className="bg-white rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2 max-w-5xl w-full">
         <div className=" text-white flex flex-col justify-center items-start p-10 space-y-6" style={{ backgroundImage: `url(${BackGround})` }}>
           <motion.div
@@ -81,7 +81,7 @@ const Signup = () => {
             transition={{ delay: 0.5 }}
             className="w-16 h-16 bg-white text-purple-600 rounded-full flex items-center justify-center shadow-lg"
           >
-            <UserPlus className="w-8 h-8" />
+            <UserPlus className="w-8 h-8 text-[#012945]" />
           </motion.div>
         </div>
 
@@ -187,7 +187,7 @@ const Signup = () => {
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg font-medium hover:from-purple-600 hover:to-pink-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              className="w-full bg-gradient-to-r from-[#012945] to-[#011929] text-white py-3 rounded-lg font-medium hover:from-[#011929] hover:to-[#012945] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
               {loading ? (
                 <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -211,6 +211,7 @@ const Signup = () => {
           </motion.div>
         </motion.div>
       </div>
+      <div className="h-[2rem] flex justify-center align-center text-[#012945] mt-[20px]">Powered BY &nbsp;<Link to="https://skilvorax.com" className="font-bold">SkilvoraX</Link></div>
     </div>
   )
 }

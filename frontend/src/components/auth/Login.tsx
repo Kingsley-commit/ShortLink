@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { useAuth } from '../../context/AuthContext'
 import { Link, useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, Mail, Lock, LogIn } from 'lucide-react'
-import BackGround from '../../assets/Group7.svg'
+import BackGround from '../../assets/Group7.png'
 
 
 const Login = () => {
@@ -46,7 +46,7 @@ const Login = () => {
 
   return (
     <div 
-      className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center bg-no-repeat" 
+      className="min-h-screen flex flex-col items-center justify-center p-4 bg-cover bg-center bg-no-repeat" 
       style={{ backgroundImage: `url(${BackGround})` }}
     >
       <motion.div
@@ -61,11 +61,11 @@ const Login = () => {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", delay: 0.2 }}
-            className="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4"
+            className="w-16 h-16 bg-gradient-to-r from-blue-500 to-[#012945] rounded-full flex items-center justify-center mx-auto mb-4"
           >
             <LogIn className="w-8 h-8 text-white" />
           </motion.div>
-          <h1 className="text-3xl font-bold text-white">Welcome Back</h1>
+          <h1 className="text-3xl font-bold text-[#fff]">Welcome Back</h1>
           <p className="text-white mt-2">Sign in to your account</p>
         </motion.div>
 
@@ -89,7 +89,7 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder:text-white"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder:text-white text-white"
                 placeholder="Enter your email"
               />
             </div>
@@ -104,7 +104,7 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder:text-white"
+                className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder:text-white text-white"
                 placeholder="Enter your password"
               />
               <button
@@ -123,7 +123,7 @@ const Login = () => {
             whileTap={{ scale: 0.98 }}
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded-lg font-medium hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+            className="w-full bg-gradient-to-r from-blue-500 to-[#012945] text-white py-3 rounded-lg font-medium hover:from-blue-600 hover:to-[#012945] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
           >
             {loading ? (
               <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -148,6 +148,7 @@ const Login = () => {
           </p>
         </motion.div>
       </motion.div>
+      <div className="h-[2rem] flex justify-center align-center text-white mt-[20px]">Powered BY &nbsp;<b className="">SkilvoraX</b></div>
     </div>
   )
 }
